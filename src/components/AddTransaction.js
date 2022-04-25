@@ -1,14 +1,25 @@
 import React, { useState, useContext } from 'react';
+import ErrorModal from './ErrorModal';
 import { GlobalContext } from '../context/GlobalState';
 
 export const AddTransaction = () => {
   const [text, setText] = useState('');
+
   const [amount, setAmount] = useState(0);
+
+  const [error, setError] = useState('');
 
   const { addTransaction } = useContext(GlobalContext);
 
-  const onSubmit = (event) => {
+  const addTransactionHandler = (event) => {
     event.preventDefault();
+    if (text.trim().length === 0 || amount.trim().length === 0) {
+      setError({
+        title: 'Invalid input',
+        message: 'Please enter a valid text and amount (non-empty value).',
+      });
+      return;
+    }
 
     const newTransaction = {
       id: Math.floor(Math.random() * 100000000),
@@ -17,6 +28,8 @@ export const AddTransaction = () => {
     };
 
     addTransaction(newTransaction);
+    setText('');
+    setAmount('');
   };
 
   const setTextHandler = (event) => {
@@ -27,10 +40,21 @@ export const AddTransaction = () => {
     setAmount(event.target.value);
   };
 
+  const errorHandler = () => {
+    setError(null);
+  };
+
   return (
     <>
+      {error && (
+        <ErrorModal
+          title={error.title}
+          message={error.message}
+          onConfirm={errorHandler}
+        />
+      )}
       <h3>Add new transaction</h3>
-      <form onSubmit={onSubmit}>
+      <form onSubmit={addTransactionHandler}>
         <div className='form-control'>
           <label htmlFor='text'>Text</label>
           <input
