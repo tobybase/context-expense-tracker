@@ -5,7 +5,7 @@ import { GlobalContext } from '../context/GlobalState';
 export const AddTransaction = () => {
   const [text, setText] = useState('');
 
-  const [amount, setAmount] = useState(0);
+  const [amount, setAmount] = useState('');
 
   const [error, setError] = useState('');
 
@@ -29,7 +29,7 @@ export const AddTransaction = () => {
 
     addTransaction(newTransaction);
     setText('');
-    setAmount('');
+    setAmount(0);
   };
 
   const setTextHandler = (event) => {
@@ -60,6 +60,7 @@ export const AddTransaction = () => {
           <input
             type='text'
             text={text}
+            value={text}
             onChange={setTextHandler}
             placeholder='Enter text...'
           />
@@ -72,6 +73,7 @@ export const AddTransaction = () => {
           <input
             type='number'
             text={amount}
+            value={amount}
             onChange={setAmountHandler}
             placeholder='Enter amount...'
           />
